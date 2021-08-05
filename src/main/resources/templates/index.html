@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+
+  	<meta charset="UTF-8"></meta>
+  	<title>Web Crawler</title>
+<h1 class="h1">Web Crawler</h1>
+
+<link rel="stylesheet" th:href="@{/css/min.css}" />
+</head>
+<body onload="chkList()">
+<caption  th:text="|No Of URL added: ${listSize}"></caption>
+<label class="caption" th:text="${duplicate}"></label>
+<script>
+function chkList(){
+
+    var btn = document.getElementById("liClass");
+    var clear = document.getElementById("liClass1");
+    var btn1 = document.getElementById("hidText").value;
+    var pid = document.getElementById("pid");
+    
+    var a=1;
+    if(a<=btn1)
+    {
+        btn.style.display = "block";
+        pid.style.display = "none";
+        clear.style.display = "block";
+    }
+    }
+    
+    
+    window.addEventListener("DOMContentLoaded", function(){
+  var url = document.getElementById("url");
+  url.addEventListener("input", function(){
+	    var regexp = /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
+	  //  var regexp1=/((?:(?:http?|ftp)[s]*:\/\/)?[a-z0-9-%\/\&=?\.]+\.[a-z]{2,4}\/?([^\s<>\#%"\,\{\}\\|\\\^\[\]`]+)?)/gi;
+	   // var regexp1 = /^(https?|ftp):\/\/(-\.)?([^\s\/?\.#-]+\.?)+(\/[^\s]*)?$/i;
+if (url != "") 
+{
+	var url1 = document.getElementById("url").value;
+        if (!regexp.test(url1)) 
+        {
+	
+           url.setCustomValidity("enter valid url");
+           
+           url.reportValidity();
+    } else 
+    {
+	
+	
+      url.setCustomValidity("");
+    }
+    }
+    
+    
+  });
+});
+    
+    
+    function isValid()
+    {
+	
+	var url1 = document.getElementById("url").value;
+	var u1;
+	 
+	if(url1.includes("www"))
+	{
+		
+		if(url1.includes("https://www"))
+		{
+			u1=url1;
+		}
+		else
+		{
+		u1=url1.replace(url1,"https://"+url1);
+
+		}
+		//alert(u1);
+	}
+	else
+	{
+	 u1=url1.replace(url1,"https://www."+url1);
+	//alert(u1);
+	}
+	document.getElementById("url").value=u1;
+	var request;
+if(window.XMLHttpRequest)
+    request = new XMLHttpRequest();
+else
+    request = new ActiveXObject("Microsoft.XMLHTTP");
+request.open('GET', u1, false);
+request.send(); // there will be a 'pause' here until the response to come.
+// the object request will be actually modified
+alert(request.status);
+if (request.status === 404) {
+    alert("The page you are trying to reach is not available.");
+}
+    }
+    
+</script>
+<form class="form-horizontal" th:action="@{/addurl}" method="post" >
+<div class="textclass">
+<p id="pid" >Please enter minimum one URL</p>
+<label for="name" >Enter URL</label>
+<input type="text" name="url" required="true"  onchange="isValid()" id="url">
+<input type="hidden" name="hidText" id="hidText" th:value="${listSize}">
+<input type="submit"  class="btnclass"   value ="Add">
+
+<li id="liClass" style="display: none;" class="alignleft"><a id="searchID"  th:href="@{/search}" >Search Word</a></li>
+<li id="liClass1" style="display: none;" class="alignleft1"><a id="clear"  th:href="@{/home}" >Clear URL </a></li>
+
+</div>
+</form>
+<body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  	<meta charset="UTF-8"></meta>
+  	<title>Search</title>
+<link rel="stylesheet" th:href="@{/css/min.css}" />
+<h1 class="h1">Web Crawler Results <label th:text="${urlFound}"></label></h1>
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 3px solid #45a049;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #ffffff;
+}
+</style>
+</head>
+<body>
+  	<h1 th:text="${hello}"></h1>
+ 	
+<div th:if="${urlFound == 'Found'}" class="container my-5">	
+    
+<table >
+                            <thead >
+                                <tr >
+                                    <th >Url</th>
+                                    <th>Address</th>
+                                </tr>
+                            </thead>
+                            <tbody  >
+                                <tr th:each="foundurl: ${foundURLS}">
+                                    <td><a th:href="${foundurl.urlAddress}" target="blank">Click Here</a></td>
+                                   <td  th:text="${foundurl.urlAddress}" /><br></tr>
+                                    
+                                </tr>
+                            </tbody>
+                        </table>
+</div>
+                        <a id="home"    th:href="@{/home}"  >Home</a>
+<body>
+</html>

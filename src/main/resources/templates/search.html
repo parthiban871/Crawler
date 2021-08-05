@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+<script type="text/javascript">
+        function disableBack() { window.history.forward(); }
+        setTimeout("disableBack()", 0);
+        window.onunload = function () { null };
+</script>
+  	<meta charset="UTF-8"></meta>
+  	<title>Search</title>
+<h1 class="h1">Web Crawler</h1>
+<link rel="stylesheet" th:href="@{/css/min.css}" />
+</head>
+<body onload="disableBack()">
+  	<h1 th:text="${hello}"></h1>
+<form class="form-horizontal" th:action="@{/searchByword}" method="post" >
+<div class="textclass">
+<label for="name" >Enter the word</label>
+<input type="text" name="search" required="true"    id="search">
+
+<input type="submit" class="btnclass" value ="Search">
+</div>
+</form>
+<body>
+</html>
