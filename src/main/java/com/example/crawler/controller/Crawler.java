@@ -20,11 +20,9 @@ public class Crawler
 
 
     /**
-     * This performs all the work. It makes an HTTP request, checks the response, and then gathers
-     * up all the links on the page. Perform a searchForWord after the successful crawl
-     *
+     
      * @param url
-     *            - The URL to visit
+     * The URL to visit
      * @return whether or not the crawl was successful
      */
     public boolean crawl(String url)
@@ -35,22 +33,6 @@ public class Crawler
             Document htmlDocument = connection.get();
             this.htmlDocument = htmlDocument;
             
-			/*
-			 * URL url1 = new URL(url); HttpURLConnection conn = (HttpURLConnection)
-			 * url1.openConnection(); conn.setRequestMethod("GET"); conn.connect(); //
-			 * Document htmlDocument = conn.getContent();
-			 * System.out.println("getResponseCode "+conn.getResponseCode());
-			 * if(conn.getResponseCode()==200) // 200 is the HTTP OK status code //
-			 * indicating that everything is great. {
-			 * System.out.println("\n**Visiting** Received web page at " + url); }
-			 */
-            
-			/*
-			 * if(!conn.getResponseMessage().contains(("text/html"))) {
-			 * System.out.println("**Failure** Retrieved something other than HTML"); return
-			 * false; }
-			 */
-			
 			  if(!connection.response().contentType().contains("text/html")) 
 			  {
 			  System.out.println("**Failure** Retrieved something other than HTML"); return
@@ -67,23 +49,20 @@ public class Crawler
         }
         catch(IOException ioe)
         {
-            // We were not successful in our HTTP request
             return false;
         }
     }
 
 
     /**
-     * Performs a search on the body of on the HTML document that is retrieved. This method should
+     * This method should
      * only be called after a successful crawl.
      *
      * @param searchWord
-     *            - The word or string to look for
      * @return whether or not the word was found
      */
     public boolean searchForWord(String searchWord)
     {
-        // Defensive coding. This method should only be used after a successful crawl.
         if(this.htmlDocument == null)
         {
             System.out.println("ERROR! Call crawl() before performing analysis on the document");

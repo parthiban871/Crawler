@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.crawler.entity.FoundUrl;
+import com.example.crawler.entity.CrawlerEntity;
 
 @Controller
 public class CrawlerController {
@@ -30,7 +30,7 @@ public class CrawlerController {
     private List<String> pagesToVisit = new LinkedList<String>();
     List<String> list=new ArrayList<String>();
     List<String> listUrl=new ArrayList<String>();
-    private static List<FoundUrl> foundURLList = new ArrayList<FoundUrl>();
+    private static List<CrawlerEntity> foundURLList = new ArrayList<CrawlerEntity>();
     //private final CrawlerRepository crawlRepository;
 
 	/*
@@ -44,6 +44,10 @@ public class CrawlerController {
 		return "index";
 	}
 	
+	/**
+     * Reset the values
+   
+     */
 	@GetMapping("/home")
 	public String homePage(Model model)
 	{
@@ -58,7 +62,13 @@ public class CrawlerController {
 		return "index";
 		
 	}
-	//@RequestMapping("/addurl")
+	
+	/**
+     * @param url
+     * If list is empty add the url, else check the url presently available in the list or not.
+     * If duplicate url found send the error message ,else add the url in the list 
+     
+     */
 	
 	  @PostMapping("/addurl")
 	  
@@ -87,9 +97,7 @@ public class CrawlerController {
 	  }
 	  
 	  }
-	  //list.add("https://www.google.com/");
 	  System.out.println("list "+list.size());
-	  //System.out.println("list "+list.get(0));
 	  model.addAttribute("listSize", list.size());
 	  return "index";
 	  
@@ -104,6 +112,13 @@ public class CrawlerController {
 	  
 	  }
 	  
+	  /**
+	     * @param Word
+	     * check the URL exist or not, and then added to the crawl.
+	     *
+	    
+	     */
+	  
 	  @PostMapping("/searchByword")
 	 
 	  public String search( String search,Model model) {
@@ -115,7 +130,7 @@ public class CrawlerController {
 	        while (this.pagesVisited.size() < MAX_PAGES_TO_SEARCH) {
 	            String currentUrl;
 	            Crawler leg = new Crawler();
-	            FoundUrl url=new FoundUrl();
+	            CrawlerEntity url=new CrawlerEntity();
 				
 				  
 				 
@@ -154,10 +169,14 @@ public class CrawlerController {
 			return "searchResults";
 	    }
 	  
+	  /**
+	     * add url into list, which found by the search keyword
+	    
+	     */
 	  
-	  public static List<FoundUrl> addList(String url) {
+	  public static List<CrawlerEntity> addList(String url) {
 	       
-	        	FoundUrl foundCurrent = new FoundUrl();
+	        	CrawlerEntity foundCurrent = new CrawlerEntity();
 	        	foundCurrent.setUrlAddress(url);
 	        
 	        	foundURLList.add(foundCurrent);
@@ -165,6 +184,10 @@ public class CrawlerController {
 	        return foundURLList;
 	    }
 	 
+	  /**
+	     * Returns true if url found in the list
+	     
+	     */
 	  
 	  public boolean checkList(String url,Model model)
 	  {
@@ -191,10 +214,8 @@ public class CrawlerController {
 }
 
 	    /**
-	     * Returns the next URL to visit (in the order that they were found). We also do a check to make
-	     * sure this method doesn't return a URL that has already been visited.
-	     *
-	     * @return
+	     * Returns the next URL  
+	     * Also check return a URL that has already been visited
 	     */
 	    private String nextUrl() {
 	        String nextUrl;

@@ -2,7 +2,7 @@ package com.example.crawler.entity;
 
 import java.util.List;
 
-public class FoundUrl {
+public class CrawlerEntity {
 	
 	
 	String urlAddress;
