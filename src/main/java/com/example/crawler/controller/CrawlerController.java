@@ -1,5 +1,8 @@
 package com.example.crawler.controller;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -48,6 +51,15 @@ public class CrawlerController {
      * Reset the values
    
      */
+	
+	@GetMapping("/back")
+	public String goBack(Model model) {
+		model.addAttribute("listSize", list.size());
+		this.pagesVisited.clear();
+		this.pagesToVisit.clear();
+		return "search";
+	}
+	
 	@GetMapping("/home")
 	public String homePage(Model model)
 	{
@@ -75,6 +87,18 @@ public class CrawlerController {
 	  public String addURL(String url,Model model) {
 	  
 		  System.out.println("url "+url);
+		  boolean result=false;
+		  try {
+			  result=checkURL(url);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		  System.out.println("URL reachable  "+result);
+	
+		  if(result)
+		  {
+		  
 	  if(list.size()==0)
 	  {
 		  list.add(url);
@@ -97,20 +121,55 @@ public class CrawlerController {
 	  }
 	  
 	  }
-	  System.out.println("list "+list.size());
-	  model.addAttribute("listSize", list.size());
-	  return "index";
-	  
+	 
+	 
+		  }
+		  
+		  
+		  else
+		  {
+			  model.addAttribute("urlNotValid", "URL Not Reachable");
+		  }
+		  System.out.println("list "+list.size());
+		  model.addAttribute("listSize", list.size());
+		  return "index";
+		  
 	  }
 	  
 	  @GetMapping("/search")
 
-	  public String searchPage() {
+	  public String searchPage(Model model) {
 		  
-		
+	  model.addAttribute("listSize", list.size());
 	  return "search";
 	  
 	  }
+	  
+	  
+	  public boolean checkURL(String url) throws IOException
+	  {
+		  
+		  boolean result=false;
+		  URL url1 = new URL(url);   
+          HttpURLConnection conn = (HttpURLConnection) url1.openConnection();
+          conn.setRequestMethod("GET");
+          conn.connect();
+          System.out.println("getResponseCode "+conn.getResponseCode());
+          if(conn.getResponseCode()==200) // 200 is the HTTP OK status code
+          // indicating that everything is great.
+          {
+        	  result=true;
+              
+              
+          }
+          else
+          {
+        	  result=false;
+          }
+		  
+		  return result;
+	  }
+	  
 	  
 	  /**
 	     * @param Word
@@ -124,6 +183,7 @@ public class CrawlerController {
 	  public String search( String search,Model model) {
 		  
 		  System.out.println("searchWord "+search);
+		  String returnVal="searchResults";
 		  //int list1=list.size();
 		  for(int i=0;i<list.size();i++) 
 		  {
@@ -140,8 +200,17 @@ public class CrawlerController {
 	            } else {
 	                currentUrl = this.nextUrl();
 	            }
-	            
+	            try
+	            {
+	            	
 	            	leg.crawl(currentUrl);
+	            }
+	            catch(Exception e)
+	            {
+	            	returnVal="error";
+	            	System.out.println("Crawl EXception" +e.getMessage());
+	            }
+	            	
 	            
 	             // Lots of stuff happening here. Look at the crawl method in
 	            // SpiderLeg
@@ -158,7 +227,7 @@ public class CrawlerController {
 	            this.pagesToVisit.addAll(leg.getLinks());
 	           // System.out.println("searchWord "+url.getListOfStringsV2().size());
 	        }
-	        System.out.println("\n**Done** Visited " + this.pagesVisited.size() + " web page(s)");
+	        System.out.println("\n**Done** Visited " + this.pagesVisited.size() + " web page(s)"+"foundURLList.size() "+foundURLList.size());
 	        
 	        if(foundURLList.size()<=0)
 	        {
@@ -166,7 +235,7 @@ public class CrawlerController {
 	        }
 	        
 	        }
-			return "searchResults";
+			return returnVal;
 	    }
 	  
 	  /**

@@ -12,6 +12,8 @@
 <body onload="chkList()">
 <caption  th:text="|No Of URL added: ${listSize}"></caption>
 <label class="caption" th:text="${duplicate}"></label>
+<label class="caption" th:text="${urlNotValid}"></label>
+
 <script>
 function chkList(){
 
@@ -69,58 +71,46 @@ if (url != "")
 			{
 				url.setCustomValidity("enter valid url");
 				//alert("Invalid");
-				return true;
+				return false;
 			}
 			
-			else{
-	
-	if(url1.length>0)
-	{
-		
-		
-	 
-			if(url1.includes("www"))
-			{
-				
-				if(url1.includes("https://www"))
-				{
-					u1=url1;
-				}
-				else
-				{
-				u1=url1.replace(url1,"https://"+url1);
-		
-				}
-				//alert(u1);
-			}
-			
-			else if(url1.includes("https://"))
-			{
-				u1=url1;
-				
-			}
 			else
 			{
-			 u1=url1.replace(url1,"https://www."+url1);
-			//alert(u1);
-			}
+	
+					if(url1.length>0)
+					{
+						
+						
+					 
+							if(url1.includes("www"))
+							{
+								
+								if(url1.includes("https://www"))
+								{
+									u1=url1;
+								}
+								else
+								{
+								u1=url1.replace(url1,"https://"+url1);
+						
+								}
+								//alert(u1);
+							}
+							
+							else if(url1.includes("https://"))
+							{
+								u1=url1;
+								
+							}
+							else
+							{
+							 u1=url1.replace(url1,"https://www."+url1);
+							//alert(u1);
+							}
+					}
+	document.getElementById("url").value=u1;
 	}
 	
-	}
-	document.getElementById("url").value=u1;
-	var request;
-if(window.XMLHttpRequest)
-    request = new XMLHttpRequest();
-else
-    request = new ActiveXObject("Microsoft.XMLHTTP");
-request.open('GET', u1, false);
-request.send(); // there will be a 'pause' here until the response to come.
-// the object request will be actually modified
-//alert(request.status);
-if (request.status === 404) 
-{
-   // alert("The page you are trying to reach is not available.");
-}
     }
     
 </script>
